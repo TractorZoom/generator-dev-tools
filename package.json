@@ -11,11 +11,13 @@
     "type": "git",
     "url": "git+https://github.com/TractorZoom/generator-dev-tools.git"
   },
-  "main": "index.js",
   "files": [
     "generators"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "yeoman-generator": "4.4.0"
   }
 }
