@@ -1,0 +1,21 @@
+{
+  "name": "@tractorzoom/generator-dev-tools",
+  "version": "0.0.0",
+  "description": "Yeoman generator to add dev tools and configurations to node projects",
+  "author": "Tractor Zoom",
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TractorZoom/generator-dev-tools.git"
+  },
+  "main": "index.js",
+  "files": [
+    "generators"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
