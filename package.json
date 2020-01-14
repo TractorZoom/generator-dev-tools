@@ -1,33 +1,46 @@
 {
-  "name": "@tractorzoom/generator-dev-tools",
-  "version": "0.0.0",
-  "description": "Yeoman generator to add dev tools and configurations to node projects",
-  "author": "Tractor Zoom",
-  "keywords": [
-    "yeoman-generator"
-  ],
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/TractorZoom/generator-dev-tools.git"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
-  "files": [
-    "generators"
-  ],
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "fs-extra": "8.1.0",
-    "yeoman-generator": "4.4.0"
-  },
-  "devDependencies": {
-    "@semantic-release/changelog": "3.0.6",
-    "@semantic-release/git": "8.0.0",
-    "@semantic-release/release-notes-generator": "7.3.5",
-    "semantic-release": "16.0.1"
-  }
+    "name": "@tractorzoom/generator-dev-tools",
+    "version": "0.0.0",
+    "description": "Yeoman generator to add dev tools and configurations to node projects",
+    "author": "Tractor Zoom",
+    "keywords": [
+        "yeoman-generator"
+    ],
+    "license": "ISC",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/TractorZoom/generator-dev-tools.git"
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com/"
+    },
+    "files": [
+        "generators"
+    ],
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "commit": "git-cz",
+        "pretty-quick": "pretty-quick"
+    },
+    "dependencies": {
+        "fs-extra": "8.1.0",
+        "yeoman-generator": "4.4.0"
+    },
+    "devDependencies": {
+        "@semantic-release/changelog": "3.0.6",
+        "@semantic-release/git": "8.0.0",
+        "@semantic-release/release-notes-generator": "7.3.5",
+        "semantic-release": "16.0.1",
+        "@commitlint/cli": "^8.2.0",
+        "@commitlint/config-conventional": "^8.2.0",
+        "commitizen": "^4.0.3",
+        "husky": "^3.1.0",
+        "prettier": "^1.19.1",
+        "pretty-quick": "^2.0.1"
+    },
+    "config": {
+        "commitizen": {
+            "path": "cz-conventional-changelog"
+        }
+    }
 }

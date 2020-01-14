@@ -1,0 +1,10 @@
+{
+    "@tractorzoom/generator-dev-tools": {
+        "promptValues": {
+            "commitlint": true,
+            "prettier": true,
+            "renovate": true,
+            "terraform": false
+        }
+    }
+}

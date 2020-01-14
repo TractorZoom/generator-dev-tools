@@ -20,7 +20,7 @@ registry=https://registry.npmjs.org
 Then:
 
 ```
-npm i --save @tractorzoom/generator-dev-tools
+npm i -g @tractorzoom/generator-dev-tools
 ```
 
 ## Usage
@@ -39,7 +39,7 @@ yo @tractorzoom/dev-tools
 
 ### Configuration Prompts
 
-- Commitlint - enables pre-commit hook for commitlint and `npm run commit` script for commit wizard
-- Prettier - enables pre-commit hook for prettier
-- Renovate - add renovate configuration
-- Terraform - adds script and pre-commit hook for terraform format
+-   Commitlint - enables pre-commit hook for commitlint and `npm run commit` script for commit wizard
+-   Prettier - enables pre-commit hook for prettier
+-   Renovate - add renovate configuration
+-   Terraform - adds script and pre-commit hook for terraform format
