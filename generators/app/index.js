@@ -11,10 +11,10 @@ const addCommitlintConfiguration = context => {
       }
     },
     devDependencies: {
-      "@commitlint/cli": "8.2.0",
-      "@commitlint/config-conventional": "8.2.0",
-      commitizen: "4.0.3",
-      husky: "3.1.0"
+      "@commitlint/cli": "^8.2.0",
+      "@commitlint/config-conventional": "^8.2.0",
+      commitizen: "^4.0.3",
+      husky: "^3.1.0"
     },
     scripts: {
       commit: "git-cz"
@@ -34,9 +34,9 @@ const addPrettierConfiguration = context => {
 
   const pkgJson = {
     devDependencies: {
-      husky: "3.1.0",
-      prettier: "1.19.1",
-      "pretty-quick": "2.0.1"
+      husky: "^3.1.0",
+      prettier: "^1.19.1",
+      "pretty-quick": "^2.0.1"
     },
     scripts: {
       "pretty-quick": "pretty-quick"
