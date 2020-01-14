@@ -39,6 +39,7 @@ yo @tractorzoom/dev-tools
 
 ### Configuration Prompts
 
+-   Circle CI - enables pre-commit hook to validate Circle CI configurations
 -   Commitlint - enables pre-commit hook for commitlint and `npm run commit` script for commit wizard
 -   Prettier - enables pre-commit hook for prettier
 -   Renovate - add renovate configuration
