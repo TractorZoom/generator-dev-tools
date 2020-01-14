@@ -166,4 +166,27 @@ module.exports = class extends Generator {
   installing() {
     this.npmInstall();
   }
+
+  end() {
+    if (this.answers.commitlint) {
+      this.log(
+        "Add Commitizen badge to your projects README: ",
+        "[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)"
+      );
+    }
+
+    if (this.answers.prettier) {
+      this.log(
+        "Add Prettier badge to your projects README: ",
+        "[![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)"
+      );
+    }
+
+    if (this.answers.renovate) {
+      this.log(
+        "Add Renovate badge to your projects README: ",
+        "[![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)"
+      );
+    }
+  }
 };
