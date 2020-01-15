@@ -1,0 +1,37 @@
+name: 'Pull Request'
+on:
+    - pull_request
+jobs:
+    test:
+        name: 'Unit Tests'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 10
+            - name: Authenticate with GitHub package registry
+              run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_PACKAGE_REGISTRY_TOKEN }}" > ~/.npmrc
+            - name: Test
+              run: |
+                  npm ci
+                  npm run test
+              env:
+                  CI: true
+
+    build:
+        name: 'Build'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 10
+            - name: Authenticate with GitHub package registry
+              run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_PACKAGE_REGISTRY_TOKEN }}" > ~/.npmrc
+            - name: Build
+              run: |
+                  npm ci --production
+                  npm run build
+              env:
+                  NODE_ENV: 'production'

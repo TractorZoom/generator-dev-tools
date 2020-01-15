@@ -1,0 +1,144 @@
+name: Release
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    unit_test:
+        name: 'Unit Test'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 10
+            - name: Authenticate with GitHub package registry
+              run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_PACKAGE_REGISTRY_TOKEN }}" > ~/.npmrc
+            - name: Test
+              run: |
+                  npm ci
+                  npm run test
+              env:
+                  CI: true
+
+    build_and_deploy_dev:
+        needs: unit_test
+        name: 'Build and Deploy DEV'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 10
+            - name: Authenticate with GitHub package registry
+              run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_PACKAGE_REGISTRY_TOKEN }}" > ~/.npmrc
+            - name: Build
+              run: |
+                  npm ci --production
+                  npm run build:dev
+              env:
+                  NODE_ENV: 'production'
+            - uses: jakejarvis/s3-sync-action@master
+              with:
+                  args: --follow-symlinks --delete
+              env:
+                  AWS_S3_BUCKET: 'iron-comps-client-dev'
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
+                  AWS_REGION: 'us-east-1'
+                  SOURCE_DIR: './build'
+            - name: Slack Notification
+              uses: homoluctus/slatify@master
+              if: failure()
+              with:
+                  icon_emoji: ':man-gesturing-no:'
+                  type: ${{ job.status }}
+                  job_name: '*Release - Development*'
+                  mention_if: 'failure'
+                  channel: '#github_actions_notifications'
+                  url: ${{ secrets.SLACK_WEBHOOK }}
+                  commit: true
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  username: ${{ env.GITHUB_REPOSITORY }}
+
+    build_and_deploy_test:
+        needs: build_and_deploy_dev
+        name: 'Build and Deploy TEST'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 10
+            - name: Authenticate with GitHub package registry
+              run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_PACKAGE_REGISTRY_TOKEN }}" > ~/.npmrc
+            - name: Build
+              run: |
+                  npm ci --production
+                  npm run build:test
+              env:
+                  NODE_ENV: 'production'
+            - uses: jakejarvis/s3-sync-action@master
+              with:
+                  args: --follow-symlinks --delete
+              env:
+                  AWS_S3_BUCKET: 'iron-comps-client-test'
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
+                  AWS_REGION: 'us-east-1'
+                  SOURCE_DIR: './build'
+            - name: Slack Notification
+              uses: homoluctus/slatify@master
+              if: failure()
+              with:
+                  icon_emoji: ':man-gesturing-no:'
+                  type: ${{ job.status }}
+                  job_name: '*Release - Testing*'
+                  mention_if: 'failure'
+                  channel: '#github_actions_notifications'
+                  url: ${{ secrets.SLACK_WEBHOOK }}
+                  commit: true
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  username: ${{ env.GITHUB_REPOSITORY }}
+
+    build_and_deploy_prod:
+        needs: build_and_deploy_test
+        name: 'Build and Deploy PROD'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 10
+            - name: Authenticate with GitHub package registry
+              run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_PACKAGE_REGISTRY_TOKEN }}" > ~/.npmrc
+            - name: Build
+              run: |
+                  npm ci --production
+                  npm run build:prod
+              env:
+                  NODE_ENV: 'production'
+            - uses: jakejarvis/s3-sync-action@master
+              with:
+                  args: --follow-symlinks --delete
+              env:
+                  AWS_S3_BUCKET: 'iron-comps-client-app'
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
+                  AWS_REGION: 'us-east-1'
+                  SOURCE_DIR: './build'
+            - name: Slack Notification
+              uses: homoluctus/slatify@master
+              if: failure()
+              with:
+                  icon_emoji: ':man-gesturing-no:'
+                  type: ${{ job.status }}
+                  job_name: '*Release - Production*'
+                  mention_if: 'failure'
+                  channel: '#github_actions_notifications'
+                  url: ${{ secrets.SLACK_WEBHOOK }}
+                  commit: true
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  username: ${{ env.GITHUB_REPOSITORY }}

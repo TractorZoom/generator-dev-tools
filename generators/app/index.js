@@ -133,12 +133,12 @@ const addSemanticReleaseConfiguration = context => {
     }
 
     fs.copyFileSync(
-        context.templatePath('.github/workflows/publish.yml'),
+        context.templatePath('.github/workflows/semantic_publish.yml'),
         context.destinationPath('.github/workflows/publish.yml')
     )
     fs.copyFileSync(
-        context.templatePath('.github/workflows/pull_request_verify.yml'),
-        context.destinationPath('.github/workflows/pull_request_verify.yml')
+        context.templatePath('.github/workflows/semantic_pull_request.yml'),
+        context.destinationPath('.github/workflows/pull_request.yml')
     )
 }
 
@@ -180,6 +180,37 @@ const addHuskyConfiguration = context => {
         '    },\n}\n'
 
     fs.writeFileSync(context.destinationPath('.huskyrc.js'), huskyConfig)
+}
+
+const addS3DeployConfiguration = context => {
+    context.log('Adding S3 deploy configuration')
+
+    const pkgJson = {
+        scripts: {
+            'build:dev': 'REACT_APP_STAGE=development npm run build',
+            'build:prod': 'REACT_APP_STAGE=production npm run build',
+            'build:test': 'REACT_APP_STAGE=testing npm run build',
+        },
+    }
+
+    context.fs.extendJSON(context.destinationPath('package.json'), pkgJson)
+
+    if (!fs.existsSync('.github')) {
+        fs.mkdirSync('.github')
+    }
+
+    if (!fs.existsSync('.github/workflows')) {
+        fs.mkdirSync('.github/workflows')
+    }
+
+    fs.copyFileSync(
+        context.templatePath('.github/workflows/s3_release.yml'),
+        context.destinationPath('.github/workflows/release.yml')
+    )
+    fs.copyFileSync(
+        context.templatePath('.github/workflows/s3_pull_request.yml'),
+        context.destinationPath('.github/workflows/pull_request.yml')
+    )
 }
 
 module.exports = class extends Generator {
@@ -233,6 +264,12 @@ module.exports = class extends Generator {
                 message: 'Would you like to enable pre-commit hook for Terraform?',
                 store: true,
             },
+            {
+                type: 'confirm',
+                name: 's3Deploy',
+                message: 'Would you like to add a deploy configuration for S3 and CloudFront?',
+                store: true,
+            },
         ])
     }
 
@@ -269,6 +306,10 @@ module.exports = class extends Generator {
 
         if (this.answers.terraform) {
             addTerraformConfiguration(this)
+        }
+
+        if (this.answers.s3Deploy) {
+            addS3DeployConfiguration(this)
         }
 
         if (shouldAddHuskyConfig) {
@@ -314,7 +355,7 @@ module.exports = class extends Generator {
 
             const appNameWithHyphen = this.appname.replace(' ', '-')
             const publishBadge = `[![Publish Status](https://github.com/TractorZoom/${appNameWithHyphen}/workflows/publish/badge.svg)](https://github.com/TractorZoom/${appNameWithHyphen}/actions)`
-            const pullRequestBadge = `[![Publish Status](https://github.com/TractorZoom/${appNameWithHyphen}/workflows/pull_request_verify/badge.svg)](https://github.com/TractorZoom/${appNameWithHyphen}/actions)`
+            const pullRequestBadge = `[![Publish Status](https://github.com/TractorZoom/${appNameWithHyphen}/workflows/pull_request/badge.svg)](https://github.com/TractorZoom/${appNameWithHyphen}/actions)`
 
             this.log('Add build status badge for publish step to your projects README: ', publishBadge, '\n')
             this.log('Add build status badge for PR verify step to your projects README: ', pullRequestBadge, '\n')
@@ -330,6 +371,27 @@ module.exports = class extends Generator {
             this.log(
                 'Ensure you have the Terraform command line tools installed for the pre-commit hook to function properly\n'
             )
+        }
+
+        if (this.answers.s3Deploy) {
+            this.log(
+                'In order for the S3 deploy process to work with GitHub Actions, some env variables need to be set:\n'
+            )
+            this.log('    AWS_KEY - AWS key for account with access to manage resources in AWS\n')
+            this.log('    AWS_SECRET - AWS secret for account with access to manage resources in AWS\n')
+            this.log(
+                '    GITHUB_PACKAGE_REGISTRY_TOKEN - token with access to download modules from private GitHub package registry\n'
+            )
+            this.log('    SLACK_WEBHOOK - Slack Webhook key for Slack org\n')
+
+            this.log('The deploy process for S3 and CloudFront expects there to be a `build` and `test` script\n')
+
+            const appNameWithHyphen = this.appname.replace(' ', '-')
+            const releaseBadge = `[![Publish Status](https://github.com/TractorZoom/${appNameWithHyphen}/workflows/release/badge.svg)](https://github.com/TractorZoom/${appNameWithHyphen}/actions)`
+            const pullRequestBadge = `[![Publish Status](https://github.com/TractorZoom/${appNameWithHyphen}/workflows/pull_request/badge.svg)](https://github.com/TractorZoom/${appNameWithHyphen}/actions)`
+
+            this.log('Add build status badge for release step to your projects README: ', releaseBadge, '\n')
+            this.log('Add build status badge for PR verify step to your projects README: ', pullRequestBadge, '\n')
         }
     }
 }
