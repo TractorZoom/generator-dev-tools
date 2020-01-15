@@ -43,4 +43,5 @@ yo @tractorzoom/dev-tools
 -   Commitlint - enables pre-commit hook for commitlint and `npm run commit` script for commit wizard
 -   Prettier - enables pre-commit hook for prettier
 -   Renovate - add renovate configuration
+-   Semantic Release - add release and PR workflows with GitHub Actions
 -   Terraform - adds script and pre-commit hook for terraform format
