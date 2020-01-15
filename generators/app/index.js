@@ -40,6 +40,27 @@ const addCommitlintConfiguration = context => {
     fs.copyFileSync(context.templatePath('commitlint.config.js'), context.destinationPath('commitlint.config.js'))
 }
 
+const addGitHubIssueTemplates = context => {
+    context.log('Adding GitHub issue templates')
+
+    if (!fs.existsSync('.github')) {
+        fs.mkdirSync('.github')
+    }
+
+    if (!fs.existsSync('.github/ISSUE_TEMPLATE')) {
+        fs.mkdirSync('.github/ISSUE_TEMPLATE')
+    }
+
+    fs.copyFileSync(
+        context.templatePath('.github/ISSUE_TEMPLATE/bug_report.md'),
+        context.destinationPath('.github/ISSUE_TEMPLATE/bug_report.md')
+    )
+    fs.copyFileSync(
+        context.templatePath('.github/ISSUE_TEMPLATE/feature_request.md'),
+        context.destinationPath('.github/ISSUE_TEMPLATE/feature_request.md')
+    )
+}
+
 const addPrettierConfiguration = context => {
     context.log('Adding Prettier configuration')
 
@@ -92,6 +113,9 @@ const addSemanticReleaseConfiguration = context => {
 
     if (!fs.existsSync('.github')) {
         fs.mkdirSync('.github')
+    }
+
+    if (!fs.existsSync('.github/workflows')) {
         fs.mkdirSync('.github/workflows')
     }
 
@@ -162,6 +186,12 @@ module.exports = class extends Generator {
             },
             {
                 type: 'confirm',
+                name: 'gitHubIssues',
+                message: 'Would you like to add GitHub issue templates?',
+                store: true,
+            },
+            {
+                type: 'confirm',
                 name: 'prettier',
                 message: 'Would you like to enable pre-commit hook for Prettier?',
                 store: true,
@@ -196,6 +226,10 @@ module.exports = class extends Generator {
 
         if (this.answers.commitlint) {
             addCommitlintConfiguration(this)
+        }
+
+        if (this.answers.gitHubIssues) {
+            addGitHubIssueTemplates(this)
         }
 
         if (this.answers.prettier) {
