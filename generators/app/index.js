@@ -61,6 +61,19 @@ const addGitHubIssueTemplates = context => {
     )
 }
 
+const addGitHubPullRequestTemplate = context => {
+    context.log('Adding GitHub pull request template')
+
+    if (!fs.existsSync('.github')) {
+        fs.mkdirSync('.github')
+    }
+
+    fs.copyFileSync(
+        context.templatePath('.github/PULL_REQUEST_TEMPLATE.md'),
+        context.destinationPath('.github/PULL_REQUEST_TEMPLATE.md')
+    )
+}
+
 const addPrettierConfiguration = context => {
     context.log('Adding Prettier configuration')
 
@@ -192,6 +205,12 @@ module.exports = class extends Generator {
             },
             {
                 type: 'confirm',
+                name: 'gitHubPullRequestTemplate',
+                message: 'Would you like to add a GitHub pull request template?',
+                store: true,
+            },
+            {
+                type: 'confirm',
                 name: 'prettier',
                 message: 'Would you like to enable pre-commit hook for Prettier?',
                 store: true,
@@ -230,6 +249,10 @@ module.exports = class extends Generator {
 
         if (this.answers.gitHubIssues) {
             addGitHubIssueTemplates(this)
+        }
+
+        if (this.answers.gitHubPullRequestTemplate) {
+            addGitHubPullRequestTemplate(this)
         }
 
         if (this.answers.prettier) {
