@@ -45,5 +45,6 @@ yo @tractorzoom/dev-tools
 -   GitHub Pull Request Template - add pull request template
 -   Prettier - enables pre-commit hook for prettier
 -   Renovate - add renovate configuration
--   Semantic Release - add release and PR workflows with GitHub Actions
+-   S3/CloudFront - add release and PR workflow with GitHub Actions for front-end applications
+-   Semantic Release - add release and PR workflows with GitHub Actions for modules
 -   Terraform - adds script and pre-commit hook for terraform format
