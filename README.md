@@ -41,6 +41,9 @@ yo @tractorzoom/dev-tools
 
 -   Circle CI - enables pre-commit hook to validate Circle CI configurations
 -   Commitlint - enables pre-commit hook for commitlint and `npm run commit` script for commit wizard
+-   GitHub Issue Template - add bug report and feature request issue templates
+-   GitHub Pull Request Template - add pull request template
 -   Prettier - enables pre-commit hook for prettier
 -   Renovate - add renovate configuration
+-   Semantic Release - add release and PR workflows with GitHub Actions
 -   Terraform - adds script and pre-commit hook for terraform format

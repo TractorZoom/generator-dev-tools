@@ -1,0 +1,39 @@
+name: publish
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 10
+            - run: npm ci
+            - run: npm test
+
+    publish-github-package-registry:
+        needs: build-and-test
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 10
+                  registry-url: https://npm.pkg.github.com/
+                  scope: '@tractorzoom'
+            - run: npm ci
+            - run: npm run build
+            - name: 'Semantic Release'
+              uses: cycjimmy/semantic-release-action@v2
+              id: semantic
+              with:
+                  branch: master
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+                  NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
