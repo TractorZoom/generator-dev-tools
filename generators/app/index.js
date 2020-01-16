@@ -1,5 +1,6 @@
 var Generator = require('yeoman-generator')
 const fs = require('fs-extra')
+const packageJSON = require('../../package.json')
 
 const addCircleCIConfiguration = context => {
     context.log('Adding Circle CI configuration')
@@ -322,76 +323,96 @@ module.exports = class extends Generator {
     }
 
     end() {
+        const date = new Date()
+        let outputStrings = [
+            `\n\n## @tractorzoom/dev-tools version ${packageJSON.version} run on ${date.toDateString()}`,
+        ]
+
         if (this.answers.commitlint) {
-            this.log(
-                'Add Commitizen badge to your projects README: ',
-                '[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)\n'
+            outputStrings.push('### Commitlint/Commitizen')
+            outputStrings.push(
+                'Add Commitizen badge to your projects README: ' +
+                    '[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)'
             )
         }
 
         if (this.answers.prettier) {
-            this.log(
-                'Add Prettier badge to your projects README: ',
-                '[![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)\n'
+            outputStrings.push('### Prettier')
+            outputStrings.push(
+                'Add Prettier badge to your projects README: ' +
+                    '[![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)'
             )
         }
 
         if (this.answers.renovate) {
-            this.log(
-                'Add Renovate badge to your projects README: ',
-                '[![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)\n'
+            outputStrings.push('### Renovate')
+            outputStrings.push(
+                'Add Renovate badge to your projects README: ' +
+                    '[![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)'
             )
         }
 
         if (this.answers.semanticRelease) {
-            this.log(
-                'Add Semantic Release badge to your projects README: ',
-                '[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)\n'
+            outputStrings.push('### Semantic Release')
+            outputStrings.push(
+                'Add Semantic Release badge to your projects README: ' +
+                    '[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)'
             )
 
-            this.log(
-                'The release process for semantic-release expects there to be a `build` and `test` script while releasing your module\n'
+            outputStrings.push(
+                'The release process for semantic-release expects there to be a `build` and `test` script while releasing your module'
             )
 
             const appNameWithHyphen = this.appname.replace(' ', '-')
             const publishBadge = `[![Publish Status](https://github.com/TractorZoom/${appNameWithHyphen}/workflows/publish/badge.svg)](https://github.com/TractorZoom/${appNameWithHyphen}/actions)`
             const pullRequestBadge = `[![Publish Status](https://github.com/TractorZoom/${appNameWithHyphen}/workflows/pull_request/badge.svg)](https://github.com/TractorZoom/${appNameWithHyphen}/actions)`
 
-            this.log('Add build status badge for publish step to your projects README: ', publishBadge, '\n')
-            this.log('Add build status badge for PR verify step to your projects README: ', pullRequestBadge, '\n')
+            outputStrings.push('Add build status badge for publish step to your projects README: ' + publishBadge)
+            outputStrings.push('Add build status badge for PR verify step to your projects README: ' + pullRequestBadge)
         }
 
         if (this.answers.circleCI) {
-            this.log(
-                'Ensure you have the Circle CI command line tools installed for the pre-commit hook to function properly\n'
+            outputStrings.push('### Circle CI')
+            outputStrings.push(
+                'Ensure you have the Circle CI command line tools installed for the pre-commit hook to function properly'
             )
         }
 
         if (this.answers.terraform) {
-            this.log(
-                'Ensure you have the Terraform command line tools installed for the pre-commit hook to function properly\n'
+            outputStrings.push('### Terraform')
+            outputStrings.push(
+                'Ensure you have the Terraform command line tools installed for the pre-commit hook to function properly'
             )
         }
 
         if (this.answers.s3Deploy) {
-            this.log(
-                'In order for the S3 deploy process to work with GitHub Actions, some env variables need to be set:\n'
+            outputStrings.push('### S3/Cloudfront')
+            outputStrings.push(
+                'In order for the S3 deploy process to work with GitHub Actions, some env variables need to be set:'
             )
-            this.log('    AWS_KEY - AWS key for account with access to manage resources in AWS\n')
-            this.log('    AWS_SECRET - AWS secret for account with access to manage resources in AWS\n')
-            this.log(
-                '    GITHUB_PACKAGE_REGISTRY_TOKEN - token with access to download modules from private GitHub package registry\n'
+            outputStrings.push(
+                '* `AWS_KEY` - AWS key for account with access to manage resources in AWS\n' +
+                    '* `AWS_SECRET` - AWS secret for account with access to manage resources in AWS\n' +
+                    '* `GITHUB_PACKAGE_REGISTRY_TOKEN` - token with access to download modules from private GitHub package registry\n' +
+                    '* `SLACK_WEBHOOK` - Slack Webhook key for Slack org'
             )
-            this.log('    SLACK_WEBHOOK - Slack Webhook key for Slack org\n')
 
-            this.log('The deploy process for S3 and CloudFront expects there to be a `build` and `test` script\n')
+            outputStrings.push(
+                'The deploy process for S3 and CloudFront expects there to be a `build` and `test` script'
+            )
 
             const appNameWithHyphen = this.appname.replace(' ', '-')
             const releaseBadge = `[![Publish Status](https://github.com/TractorZoom/${appNameWithHyphen}/workflows/release/badge.svg)](https://github.com/TractorZoom/${appNameWithHyphen}/actions)`
             const pullRequestBadge = `[![Publish Status](https://github.com/TractorZoom/${appNameWithHyphen}/workflows/pull_request/badge.svg)](https://github.com/TractorZoom/${appNameWithHyphen}/actions)`
 
-            this.log('Add build status badge for release step to your projects README: ', releaseBadge, '\n')
-            this.log('Add build status badge for PR verify step to your projects README: ', pullRequestBadge, '\n')
+            outputStrings.push('Add build status badge for release step to your projects README: ' + releaseBadge)
+            outputStrings.push('Add build status badge for PR verify step to your projects README: ' + pullRequestBadge)
         }
+
+        if (!fs.existsSync('docs')) {
+            fs.mkdirSync('docs')
+        }
+
+        fs.appendFileSync(this.destinationPath('docs/generator_output.md'), outputStrings.join('\n\n'))
     }
 }
