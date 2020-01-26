@@ -26,10 +26,10 @@ const addCommitlintConfiguration = context => {
             },
         },
         devDependencies: {
-            '@commitlint/cli': '^8.2.0',
-            '@commitlint/config-conventional': '^8.2.0',
+            '@commitlint/cli': '^8.3.5',
+            '@commitlint/config-conventional': '^8.3.4',
             commitizen: '^4.0.3',
-            husky: '^3.1.0',
+            husky: '^4.2.1',
         },
         scripts: {
             commit: 'git-cz',
@@ -80,7 +80,7 @@ const addPrettierConfiguration = context => {
 
     const pkgJson = {
         devDependencies: {
-            husky: '^3.1.0',
+            husky: '^4.2.1',
             prettier: '^1.19.1',
             'pretty-quick': '^2.0.1',
         },
@@ -114,7 +114,7 @@ const addSemanticReleaseConfiguration = context => {
             '@semantic-release/changelog': '^3.0.6',
             '@semantic-release/git': '^8.0.0',
             '@semantic-release/release-notes-generator': '^7.3.5',
-            'semantic-release': '^16.0.1',
+            'semantic-release': '^16.0.3',
         },
         publishConfig: {
             registry: 'https://npm.pkg.github.com/',
