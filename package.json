@@ -1,6 +1,6 @@
 {
     "name": "@tractorzoom/generator-dev-tools",
-    "version": "1.4.3",
+    "version": "1.4.4",
     "description": "Yeoman generator to add dev tools and configurations to node projects",
     "author": "Tractor Zoom",
     "keywords": [
