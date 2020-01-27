@@ -414,5 +414,7 @@ module.exports = class extends Generator {
         }
 
         fs.appendFileSync(this.destinationPath('docs/generator_output.md'), outputStrings.join('\n\n'))
+
+        context.log('Implementation instructions added to docs/generator_output.md')
     }
 }
