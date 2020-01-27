@@ -319,7 +319,12 @@ module.exports = class extends Generator {
     }
 
     installing() {
-        this.npmInstall()
+        const shouldInstallNodeModules =
+            this.answers.commitlint || this.answers.prettier || this.answers.semanticRelease
+
+        if (shouldInstallNodeModules) {
+            this.npmInstall()
+        }
     }
 
     end() {
