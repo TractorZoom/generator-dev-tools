@@ -1,0 +1,84 @@
+name: Deploy
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    test:
+        name: Tests
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 10
+            - name: Authenticate with GitHub package registry
+              run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_PACKAGE_REGISTRY_TOKEN }}" > ~/.npmrc
+            - name: Build & Test
+              run: |
+                  npm ci
+                  npm run test
+              env:
+                  CI: true
+
+    validate-sam-template:
+        needs: test
+        runs-on: ubuntu-latest
+        name: Validate SAM Template
+        steps:
+            - uses: actions/checkout@v1
+            - name: sam validate
+              uses: TractorZoom/sam-cli-action@master
+              with:
+                  sam_command: 'validate'
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  AWS_DEFAULT_REGION: us-east-1
+
+    test-deploy:
+        needs: validate-sam-template
+        runs-on: ubuntu-latest
+        name: Test Deploy
+        steps:
+            - uses: actions/checkout@v1
+            - name: SAM Build
+              uses: TractorZoom/sam-cli-action@master
+              with:
+                  sam_command: 'build --parameter-overrides ENV=Test'
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  AWS_DEFAULT_REGION: us-east-1
+            - name: SAM Deploy
+              uses: TractorZoom/sam-cli-action@master
+              with:
+                  sam_command: 'deploy --parameter-overrides ENV=Test --stack-name STACK_NAME'
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  AWS_DEFAULT_REGION: us-east-1
+
+    prod-deploy:
+        needs: test-deploy
+        runs-on: ubuntu-latest
+        name: Prod Deploy
+        steps:
+            - uses: actions/checkout@v1
+            - name: sam build
+              uses: TractorZoom/sam-cli-action@master
+              with:
+                  sam_command: 'build --parameter-overrides ENV=Prod'
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  AWS_DEFAULT_REGION: us-east-1
+            - name: sam deploy
+              uses: TractorZoom/sam-cli-action@master
+              with:
+                  sam_command: 'deploy --parameter-overrides ENV=Prod --stack-name STACK_NAME'
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  AWS_DEFAULT_REGION: us-east-1
