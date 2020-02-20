@@ -180,6 +180,23 @@ const addS3DeployConfiguration = context => {
     )
 }
 
+const addSAMDeployConfiguration = context => {
+    context.log('Adding SAM deploy configuration')
+
+    if (!fs.existsSync('.github')) {
+        fs.mkdirSync('.github')
+    }
+
+    if (!fs.existsSync('.github/workflows')) {
+        fs.mkdirSync('.github/workflows')
+    }
+
+    fs.copyFileSync(
+        context.templatePath('.github/workflows/sam_deploy.yml'),
+        context.destinationPath('.github/workflows/deploy.yml')
+    )
+}
+
 module.exports = class extends Generator {
     async prompting() {
         this.answers = await this.prompt([
@@ -225,6 +242,12 @@ module.exports = class extends Generator {
                 message: 'Would you like to add a deploy configuration for S3 and CloudFront?',
                 store: true,
             },
+            {
+                type: 'confirm',
+                name: 'samDeploy',
+                message: 'Would you like to add a SAM deploy configuration?',
+                store: true,
+            },
         ])
     }
 
@@ -257,6 +280,10 @@ module.exports = class extends Generator {
 
         if (this.answers.s3Deploy) {
             addS3DeployConfiguration(this)
+        }
+
+        if (this.answers.samDeploy) {
+            addSAMDeployConfiguration(this)
         }
 
         if (shouldAddHuskyConfig) {
@@ -358,6 +385,23 @@ module.exports = class extends Generator {
 
             outputStrings.push('Add build status badge for release step to your projects README: ' + releaseBadge)
             outputStrings.push('Add build status badge for PR verify step to your projects README: ' + pullRequestBadge)
+        }
+
+        if (this.answers.samDeploy) {
+            outputStrings.push('### SAM Deploy')
+            outputStrings.push(
+                'In order for the SAM Deploy to work with Github Actions, some env variables need to be set:'
+            )
+            outputStrings.push(
+                '* `AWS_ACCESS_KEY_ID`: AWS key for account with access to manage resources in AWS\n' +
+                    '* `AWS_SECRET_ACCESS_KEY`: AWS secret for account with access to manage resources in AWS\n' +
+                    '* `GITHUB_PACKAGE_REGISTRY_TOKEN`: token with read access to download modules from private Github Package Registry'
+            )
+
+            const appNameWithHyphen = this.appname.replace(' ', '-')
+            const deployBadge = `[![Deploy Status](https://github.com/TractorZoom/${appNameWithHyphen}/workflows/release/badge.svg)](https://github.com/TractorZoom/${appNameWithHyphen}/actions)`
+
+            outputStrings.push('Add build status badge for deploy step to your projects README: ' + deployBadge)
         }
 
         if (!fs.existsSync('docs')) {
