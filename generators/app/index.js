@@ -197,6 +197,12 @@ const addSAMDeployConfiguration = context => {
     )
 }
 
+const addJestConfiguration = context => {
+    context.log('Adding Jest Configuration')
+
+    fs.copyFileSync(context.templatePath('jest.config.js'), context.destinationPath('jest.config.js'))
+}
+
 module.exports = class extends Generator {
     async prompting() {
         this.answers = await this.prompt([
@@ -248,6 +254,12 @@ module.exports = class extends Generator {
                 message: 'Would you like to add a SAM deploy configuration?',
                 store: true,
             },
+            {
+                type: 'confirm',
+                name: 'jestConfig',
+                message: 'Would you like to add a Jest configuration?',
+                store: true,
+            },
         ])
     }
 
@@ -284,6 +296,10 @@ module.exports = class extends Generator {
 
         if (this.answers.samDeploy) {
             addSAMDeployConfiguration(this)
+        }
+
+        if (this.answers.jestConfig) {
+            addJestConfiguration(this)
         }
 
         if (shouldAddHuskyConfig) {
