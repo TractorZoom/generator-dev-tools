@@ -11,9 +11,6 @@
         "type": "git",
         "url": "git+https://github.com/TractorZoom/generator-dev-tools.git"
     },
-    "publishConfig": {
-        "registry": "https://npm.pkg.github.com/"
-    },
     "files": [
         "generators"
     ],

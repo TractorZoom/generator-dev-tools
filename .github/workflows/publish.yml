@@ -6,16 +6,13 @@ on:
       - master
 
 jobs:
-  publish-github-package-registry:
-    name: "GitHub Package Release"
+  npm-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
           node-version: 10
-          registry-url: https://npm.pkg.github.com/
-          scope: "@tractorzoom"
       - run: npm ci
       - name: "Semantic Release"
         uses: cycjimmy/semantic-release-action@v2

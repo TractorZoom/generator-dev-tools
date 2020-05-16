@@ -8,27 +8,6 @@ Yeoman generator to add dev tools and configurations to node projects
 
 ## Install
 
-To download make sure the Tractor Zoom GitHub org has been added to your user `.npmrc` file:
-
--   if no ~/.npmrc file exists run `touch ~/.npmrc` in your terminal
-
-**Note: set registry value to whatever registry you are currently using**
-
-```
-registry=https://registry.npmjs.org
-@tractorzoom:registry=https://npm.pkg.github.com
-```
-
-Then:
-
-[Authenticate](https://help.github.com/en/github/managing-packages-with-github-packages/configuring-npm-for-use-with-github-packages#authenticating-to-github-packages)
-
-```
-npm login --@tractorzoom:registry
-```
-
-Then:
-
 ```
 npm i -g @tractorzoom/generator-dev-tools
 ```
@@ -54,5 +33,7 @@ yo @tractorzoom/dev-tools
 -   Prettier - enables pre-commit hook for prettier
 -   Renovate - add renovate configuration
 -   S3/CloudFront - add release and PR workflow with GitHub Actions for front-end applications
+-   SAM - add deploy workflow with GitHub Actions for SAM deploy for micro services
 -   Semantic Release - add release and PR workflows with GitHub Actions for modules
 -   Terraform - adds script and pre-commit hook for terraform format
+-   Jest - adds Jest configuration file
