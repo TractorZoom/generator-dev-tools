@@ -1,6 +1,7 @@
 var Generator = require('yeoman-generator');
 const fs = require('fs-extra');
 const packageJSON = require('../../package.json');
+const replace = require('replace-in-file');
 
 const addCircleCIConfiguration = (context) => {
     context.log('Adding Circle CI configuration');
@@ -182,6 +183,18 @@ const addS3DeployConfiguration = (context) => {
         context.templatePath('.github/workflows/s3_pull_request.yml'),
         context.destinationPath('.github/workflows/pull_request.yml')
     );
+
+    const options = {
+        files: context.destinationPath('.github/workflows/release.yml'),
+        from: /<<s3-bucket-base-name>>/g,
+        to: context.answers.s3DeployBucketName,
+    };
+
+    try {
+        replace.sync(options);
+    } catch (error) {
+        context.error('Error replacing s3 bucket base name:', error);
+    }
 };
 
 const addSAMDeployConfiguration = (context) => {
@@ -199,6 +212,18 @@ const addSAMDeployConfiguration = (context) => {
         context.templatePath('.github/workflows/sam_deploy.yml'),
         context.destinationPath('.github/workflows/deploy.yml')
     );
+
+    const options = {
+        files: context.destinationPath('.github/workflows/deploy.yml'),
+        from: /<<stack-base-name>>/g,
+        to: context.answers.samDeployStackName,
+    };
+
+    try {
+        replace.sync(options);
+    } catch (error) {
+        context.error('Error replacing s3 bucket base name:', error);
+    }
 };
 
 const addJestConfiguration = (context) => {
@@ -253,9 +278,37 @@ module.exports = class extends Generator {
                 store: true,
             },
             {
+                type: 'input',
+                name: 's3DeployBucketName',
+                message: 'What is the base name of the S3 bucket to deploy to?',
+                when: (answers) => answers.s3Deploy,
+                validate: (answer) => {
+                    if (answer) {
+                        return true;
+                    }
+                    this.log('*** Please enter the base name for the S3 bucket to deploy to (ie foo-bar-client).');
+                    return false;
+                },
+                store: true,
+            },
+            {
                 type: 'confirm',
                 name: 'samDeploy',
                 message: 'Would you like to add a SAM deploy configuration?',
+                store: true,
+            },
+            {
+                type: 'input',
+                name: 'samDeployStackName',
+                message: 'What is the base stack name of the SAM deploy?',
+                when: (answers) => answers.samDeploy,
+                validate: (answer) => {
+                    if (answer) {
+                        return true;
+                    }
+                    this.log('*** Please enter the base stack name for the SAM deploy (ie foo-bar-service).');
+                    return false;
+                },
                 store: true,
             },
             {
@@ -434,6 +487,6 @@ module.exports = class extends Generator {
 
         fs.appendFileSync(this.destinationPath('docs/generator_output.md'), outputStrings.join('\n\n'));
 
-        context.log('Implementation instructions added to docs/generator_output.md');
+        this.log('Implementation instructions added to docs/generator_output.md');
     }
 };
