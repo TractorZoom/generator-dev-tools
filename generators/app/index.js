@@ -87,9 +87,6 @@ const addSemanticReleaseConfiguration = (context) => {
             '@semantic-release/release-notes-generator': '^7.3.5',
             'semantic-release': '^16.0.3',
         },
-        publishConfig: {
-            registry: 'https://npm.pkg.github.com/',
-        },
     };
 
     context.fs.extendJSON(context.destinationPath('package.json'), pkgJson);
@@ -446,7 +443,6 @@ module.exports = class extends Generator {
             outputStrings.push(
                 '* `AWS_KEY` - AWS key for account with access to manage resources in AWS\n' +
                     '* `AWS_SECRET` - AWS secret for account with access to manage resources in AWS\n' +
-                    '* `GITHUB_PACKAGE_REGISTRY_TOKEN` - token with access to download modules from private GitHub package registry\n' +
                     '* `SLACK_WEBHOOK` - Slack Webhook key for Slack org'
             );
 
@@ -471,8 +467,7 @@ module.exports = class extends Generator {
             );
             outputStrings.push(
                 '* `AWS_ACCESS_KEY_ID`: AWS key for account with access to manage resources in AWS\n' +
-                    '* `AWS_SECRET_ACCESS_KEY`: AWS secret for account with access to manage resources in AWS\n' +
-                    '* `GITHUB_PACKAGE_REGISTRY_TOKEN`: token with read access to download modules from private Github Package Registry'
+                    '* `AWS_SECRET_ACCESS_KEY`: AWS secret for account with access to manage resources in AWS\n'
             );
 
             const appNameWithHyphen = this.appname.replace(' ', '-');
