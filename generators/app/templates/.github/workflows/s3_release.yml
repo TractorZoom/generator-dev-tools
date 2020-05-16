@@ -44,7 +44,7 @@ jobs:
               with:
                   args: --follow-symlinks --delete
               env:
-                  AWS_S3_BUCKET: 'iron-comps-client-dev'
+                  AWS_S3_BUCKET: '<<s3-bucket-base-name>>-dev'
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
                   AWS_REGION: 'us-east-1'
@@ -84,7 +84,7 @@ jobs:
               with:
                   args: --follow-symlinks --delete
               env:
-                  AWS_S3_BUCKET: 'iron-comps-client-test'
+                  AWS_S3_BUCKET: '<<s3-bucket-base-name>>-test'
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
                   AWS_REGION: 'us-east-1'
@@ -124,7 +124,7 @@ jobs:
               with:
                   args: --follow-symlinks --delete
               env:
-                  AWS_S3_BUCKET: 'iron-comps-client-app'
+                  AWS_S3_BUCKET: '<<s3-bucket-base-name>>-app'
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
                   AWS_REGION: 'us-east-1'
