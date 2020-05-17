@@ -10,8 +10,6 @@ jobs:
             - uses: actions/setup-node@v1
               with:
                   node-version: 10
-            - name: Authenticate with GitHub package registry
-              run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_PACKAGE_REGISTRY_TOKEN }}" > ~/.npmrc
             - name: Test
               run: |
                   npm ci
@@ -27,8 +25,6 @@ jobs:
             - uses: actions/setup-node@v1
               with:
                   node-version: 10
-            - name: Authenticate with GitHub package registry
-              run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_PACKAGE_REGISTRY_TOKEN }}" > ~/.npmrc
             - name: Build
               run: |
                   npm ci --production
