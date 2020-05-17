@@ -34,6 +34,6 @@ yo @tractorzoom/dev-tools
 -   Renovate - add renovate configuration
 -   S3/CloudFront - add release and PR workflow with GitHub Actions for front-end applications
 -   SAM - add deploy workflow with GitHub Actions for SAM deploy for micro services
--   Semantic Release - add release and PR workflows with GitHub Actions for modules
+-   Semantic Release - add release and PR workflows with GitHub Actions for modules using semantic release
 -   Terraform - adds script and pre-commit hook for terraform format
 -   Jest - adds Jest configuration file
