@@ -53,6 +53,7 @@ const addPrettierConfiguration = (context) => {
         },
         scripts: {
             'pretty-quick': 'pretty-quick',
+            'prettier:all': "prettier --write './**/*.*'",
         },
     };
 
