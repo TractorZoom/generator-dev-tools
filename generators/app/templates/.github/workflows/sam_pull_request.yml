@@ -1,0 +1,33 @@
+name: 'Pull Request'
+on:
+    - pull_request
+
+jobs:
+    test:
+        name: 'Tests'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 12
+            - name: Build & Test
+              run: |
+                  npm ci
+                  npm run test
+              env:
+                  CI: true
+
+    validate-sam-template:
+        runs-on: ubuntu-latest
+        name: Validate SAM Template
+        steps:
+            - uses: actions/checkout@v1
+            - name: sam validate
+              uses: TractorZoom/sam-cli-action@master
+              with:
+                  sam_command: 'validate'
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  AWS_DEFAULT_REGION: us-east-1
