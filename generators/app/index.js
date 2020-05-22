@@ -384,6 +384,14 @@ module.exports = class extends Generator {
             );
         }
 
+        if (this.answers.jestConfig) {
+            outputStrings.push('### Jest');
+            outputStrings.push(
+                'Add Jest badge to your projects README: ' +
+                    '[![jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest)'
+            );
+        }
+
         if (this.answers.prettier) {
             outputStrings.push('### Prettier');
             outputStrings.push(
