@@ -64,7 +64,7 @@ jobs:
         name: Prod Deploy
         steps:
             - uses: actions/checkout@v1
-            - name: sam build
+            - name: SAM build
               uses: TractorZoom/sam-cli-action@master
               with:
                   sam_command: 'build --parameter-overrides ENV=Prod'
@@ -72,7 +72,7 @@ jobs:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   AWS_DEFAULT_REGION: us-east-1
-            - name: sam deploy
+            - name: SAM deploy
               uses: TractorZoom/sam-cli-action@master
               with:
                   sam_command: 'deploy --parameter-overrides ENV=Prod --stack-name <<stack-base-name>>-prod'
