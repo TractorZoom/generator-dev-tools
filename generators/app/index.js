@@ -207,6 +207,11 @@ const addSAMDeployConfiguration = (context) => {
     }
 
     fs.copyFileSync(
+        context.templatePath('.github/workflows/sam_pull_request.yml'),
+        context.destinationPath('.github/workflows/pull_request.yml')
+    );
+
+    fs.copyFileSync(
         context.templatePath('.github/workflows/sam_deploy.yml'),
         context.destinationPath('.github/workflows/deploy.yml')
     );
