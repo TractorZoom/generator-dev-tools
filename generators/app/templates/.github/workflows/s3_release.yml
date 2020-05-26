@@ -7,7 +7,7 @@ on:
 
 jobs:
     unit_test:
-        name: 'Unit Test'
+        name: Unit Test
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v1
@@ -23,7 +23,7 @@ jobs:
 
     build_and_deploy_dev:
         needs: unit_test
-        name: 'Build and Deploy DEV'
+        name: Build and Deploy DEV
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v1
@@ -61,7 +61,7 @@ jobs:
 
     build_and_deploy_test:
         needs: build_and_deploy_dev
-        name: 'Build and Deploy TEST'
+        name: Build and Deploy TEST
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v1
@@ -99,7 +99,7 @@ jobs:
 
     build_and_deploy_prod:
         needs: build_and_deploy_test
-        name: 'Build and Deploy PROD'
+        name: Build and Deploy PROD
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v1
