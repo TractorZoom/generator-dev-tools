@@ -4,7 +4,12 @@
             "commitlint": true,
             "prettier": true,
             "renovate": true,
-            "terraform": false
+            "terraform": false,
+            "circleCI": false,
+            "semanticRelease": true,
+            "s3Deploy": false,
+            "samDeploy": false,
+            "jestConfig": true
         }
     }
 }

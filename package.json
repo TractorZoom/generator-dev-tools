@@ -14,9 +14,10 @@
         "generators"
     ],
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "commit": "git-cz",
-        "pretty-quick": "pretty-quick"
+        "prettier:all": "prettier --write './**/*.*'",
+        "pretty-quick": "pretty-quick",
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
         "fs-extra": "9.0.0",
