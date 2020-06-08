@@ -73,6 +73,7 @@ const addRenovateConfiguration = (context) => {
         },
         prConcurrentLimit: 5,
         prHourlyLimit: 10,
+        semanticCommitType: 'fix',
     };
 
     context.fs.extendJSON(context.destinationPath('renovate.json'), renovateJSON);
