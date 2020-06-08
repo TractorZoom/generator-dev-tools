@@ -455,8 +455,8 @@ module.exports = class extends Generator {
                 'In order for the S3 deploy process to work with GitHub Actions, some env variables need to be set:'
             );
             outputStrings.push(
-                '* `AWS_KEY` - AWS key for account with access to manage resources in AWS\n' +
-                    '* `AWS_SECRET` - AWS secret for account with access to manage resources in AWS\n' +
+                '* `AWS_ACCESS_KEY_ID` - AWS key for account with access to manage resources in AWS\n' +
+                    '* `AWS_SECRET_ACCESS_KEY` - AWS secret for account with access to manage resources in AWS\n' +
                     '* `SLACK_WEBHOOK` - Slack Webhook key for Slack org'
             );
 
