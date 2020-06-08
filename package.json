@@ -7,9 +7,6 @@
     "engines": {
         "node": "12.x"
     },
-    "keywords": [
-        "yeoman-generator"
-    ],
     "files": [
         "generators"
     ],
@@ -40,5 +37,20 @@
         "commitizen": {
             "path": "cz-conventional-changelog"
         }
-    }
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/TractorZoom/generator-dev-tools.git"
+    },
+    "homepage": "https://github.com/TractorZoom/generator-dev-tools",
+    "bugs": {
+        "url": "https://github.com/TractorZoom/generator-dev-tools/issues"
+    },
+    "keywords": [
+        "dev-tools",
+        "developer",
+        "developer-tools",
+        "yeoman",
+        "yeoman-generator"
+    ]
 }
