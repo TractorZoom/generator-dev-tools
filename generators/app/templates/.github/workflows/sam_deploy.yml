@@ -52,7 +52,7 @@ jobs:
             - name: SAM Deploy
               uses: TractorZoom/sam-cli-action@master
               with:
-                  sam_command: 'deploy --parameter-overrides ENV=Test --stack-name <<stack-base-name>>-test'
+                  sam_command: 'deploy --no-fail-on-empty-changeset --parameter-overrides ENV=Test --stack-name <<stack-base-name>>-test'
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -75,7 +75,7 @@ jobs:
             - name: SAM deploy
               uses: TractorZoom/sam-cli-action@master
               with:
-                  sam_command: 'deploy --parameter-overrides ENV=Prod --stack-name <<stack-base-name>>-prod'
+                  sam_command: 'deploy --no-fail-on-empty-changeset --parameter-overrides ENV=Prod --stack-name <<stack-base-name>>-prod'
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
