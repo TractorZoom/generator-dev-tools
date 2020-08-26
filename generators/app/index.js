@@ -71,6 +71,12 @@ const addRenovateConfiguration = (context) => {
         major: {
             automerge: false,
         },
+        packageRules: [
+            {
+                packageNames: ['aws-sdk'],
+                schedule: ['after 9pm on sunday'],
+            },
+        ],
         prConcurrentLimit: 5,
         prHourlyLimit: 10,
         semanticCommitType: 'fix',
